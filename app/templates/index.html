@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>Short1url</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <img src="/public/favicon.svg" alt="logo">
+        <h1>Short1url</h1>
+    </header>
+
+    <main>
+        <form action="/api" method="post" target="hidden-iframe">
+            <input type="text" name="url" id="url" placeholder="Enter URL">
+            <button type="submit">Shorten</button>
+        </form>
+
+        <iframe name="hidden-iframe" style="display: none;"></iframe>
+
+        <div>
+            <p>Your shorted URL: {{ .url }}</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright <a href="https://github.com/thuongtruong1009">@thuongtruong1009</a>, 2023-PRESENT</p>
+    </footer>
+</body>
+</html>
