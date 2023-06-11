@@ -11,6 +11,10 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
-    "nuxt": "^3.5.2"
+    "nuxt": "^3.5.2",
+    "sass": "^1.63.3"
+  },
+  "dependencies": {
+    "@nuxtjs/pwa": "^3.3.5"
   }
 }

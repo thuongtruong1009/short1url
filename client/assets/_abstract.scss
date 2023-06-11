@@ -1,0 +1,24 @@
+@mixin button($color) {
+    background-color: $color;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    margin-left: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: darken($color, 10%);
+    }
+}
+
+@mixin link($color) {
+    color: $color;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        filter: brightness(110%)
+    }
+}

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Lobster+Two&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+$yellow: #FFCD02;
+$green: #2a9d8f;
+$purple: #9856d6;
+$black: #333;
+$light-blue: #D9F1FF;
+$blue: #4EB3EC;
+$red: #EC3750;
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+input, button {
+    outline: none;
+    border: none;
+    border-radius: 0.4rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
