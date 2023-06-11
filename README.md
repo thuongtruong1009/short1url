@@ -1,5 +1,7 @@
 # SHORT1URL
 
+<img align="center" src="public/architecture.png" alt="architecture_img">
+
 ## How to run in local
 
 1. Clone this repo
@@ -29,3 +31,7 @@ curl -X POST 'http://localhost:3000/api'
      -d '{"url": "<your_original_url>"}"
 ```
 
+## References
+
+[Logo](https://icon-icons.com/icon/link/102162)
+[Ref1](https://liamhieuvu.com/url-shortener-with-golang-and-mysql)

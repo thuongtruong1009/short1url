@@ -1,0 +1,32 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with "go test -c"
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go binary
+go
+
+# Dependency directories (remove the ones you don't need)
+vendor/
+!go.mod
+!go.sum
+
+# IDE files (remove the ones you don't need)
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+.docker/data/*
+!.docker/data/.gitkeep
+
+*/node_modules/*

@@ -1,0 +1,87 @@
+<!-- form.html -->
+<form method="POST" action="/">
+    <input type="text" name="field1" placeholder="Field 1"><br>
+    <input type="text" name="field2" placeholder="Field 2"><br>
+    <button type="submit">Submit</button>
+</form>
+
+<div id="response-container">
+    {{if .ResponseData}}
+        Response Data: {{.ResponseData}}
+    {{end}}
+</div>
+
+
+
+--------------------------------
+package main
+
+import (
+	"fmt"
+	"github.com/gofiber/fiber/v2"
+	"html/template"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+)
+
+type ViewData struct {
+	ResponseData string
+}
+
+func main() {
+	app := fiber.New()
+
+	app.Get("/", renderForm)
+	app.Post("/", handleForm)
+
+	app.Listen(":8080")
+}
+
+func renderForm(c *fiber.Ctx) error {
+	tmpl := template.Must(template.ParseFiles("form.html"))
+
+	data := ViewData{
+		ResponseData: "",
+	}
+
+	err := tmpl.Execute(c.Response().BodyWriter(), data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func handleForm(c *fiber.Ctx) error {
+	formData := url.Values{
+		"field1": {c.FormValue("field1")},
+		"field2": {c.FormValue("field2")},
+	}
+
+	response, err := http.PostForm("https://example.com/endpoint", formData)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return err
+	}
+
+	responseData := fmt.Sprintf("%s", string(body))
+
+	tmpl := template.Must(template.ParseFiles("form.html"))
+
+	data := ViewData{
+		ResponseData: responseData,
+	}
+
+	err = tmpl.Execute(c.Response().BodyWriter(), data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

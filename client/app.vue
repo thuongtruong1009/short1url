@@ -1,3 +1,58 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const url = ref<string>('');
+
+const shortedUrl = ref<string>('');
+
+const onSubmit = async (e: Event) => {
+    if (!url.value) return;
+    e.preventDefault();
+    const response = await fetch('http://localhost:3000/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: url.value })
+    });
+
+    const data = await response.json();
+
+    shortedUrl.value = data.short;
+}
+
+</script>
+
+<template>
+  <div>
+    <header>
+        <img src="/favicon.svg" alt="logo">
+        <h1>Short1url</h1>
+    </header>
+
+    <main>
+        <form @submit.prevent="onSubmit">
+            <input type="text" name="url" id="url" placeholder="Enter URL" v-model="url">
+            <button type="submit" @click="onSubmit" :disabled="url.value">Shorten</button>
+        </form>
+
+
+        <div class="response">
+            <p>Your shorted URL:</p>
+            <a :href="shortedUrl">{{shortedUrl || 'dedddededed'}}</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright <a href="https://github.com/thuongtruong1009">@thuongtruong1009</a>, 2023-PRESENT</p>
+    </footer>
+  </div>
+</template>
+
+<style scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap');
+
 body{
     background-color: #f5f5f5;
     font-family: 'Open Sans', sans-serif;
@@ -111,6 +166,17 @@ form > button:hover {
     cursor: pointer;
 }
 
+.response {
+    display: flex;
+    align-items: center;
+}
+
+.response > p {
+    margin-right: 0.5rem;
+}
+
+
+
 footer{
     position: absolute;
     bottom: 0;
@@ -119,3 +185,4 @@ footer{
     padding: 1rem;
     font-size: 0.8rem;
 }
+</style>

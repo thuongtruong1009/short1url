@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
-	"github.com/go-redis/redis/v8"
+	// "github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"github.com/thuongtruong1009/short1url/helpers"
 	"github.com/thuongtruong1009/short1url/database"
@@ -36,16 +36,16 @@ func ShortenURL(c *fiber.Ctx) error {
 	r2 := database.CreateClient(1)
 	defer r2.Close()
 	val, err := r2.Get(database.Ctx, c.IP()).Result()
-	if err == redis.Nil {
-		_ = r2.Set(database.Ctx, c.IP(), os.Getenv("API_QUOTA"), 30*60*time.Second).Err()
-	} else {
-		val, _ = r2.Get(database.Ctx, c.IP()).Result()
-		valInt, _ := strconv.Atoi(val)
-		if valInt > 0 {
-			limit, _ := r2.TTL(database.Ctx, c.IP()).Result()
-			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error":"rate limit exceeded", "retry_after":limit / time.Nanosecond / 1000})
-		}
-	}
+	// if err == redis.Nil {
+	// 	_ = r2.Set(database.Ctx, c.IP(), os.Getenv("API_QUOTA"), 1*time.Second).Err()
+	// } else {
+	// 	val, _ = r2.Get(database.Ctx, c.IP()).Result()
+	// 	valInt, _ := strconv.Atoi(val)
+	// 	if valInt > 0 {
+	// 		limit, _ := r2.TTL(database.Ctx, c.IP()).Result()
+	// 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error":"rate limit exceeded", "retry_after": limit / time.Second})
+	// 	}
+	// }
 
 	if !govalidator.IsURL(body.URL) {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error":"invalid URL"})
