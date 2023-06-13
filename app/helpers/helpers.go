@@ -3,7 +3,6 @@ package helpers
 import (
 	"os"
 	"strings"
-	"regexp"
 )
 
 func EnforceHTTP(url string) string {
@@ -18,12 +17,9 @@ func RemoveDomainError(url string) bool {
 		return false
 	}
 
-	// newURL := strings.Replace(url, "http://", "", 1)
-	// newURL = strings.Replace(newURL, "https://", "", 1)
-	// newURL = strings.Replace(newURL, "www.", "", 1)
-
-	regex := regexp.MustCompile(`^(https?://)(www\.)?`)
-	newURL := regex.ReplaceAllString(url, "")
+	newURL := strings.Replace(url, "http://", "", 1)
+	newURL = strings.Replace(newURL, "https://", "", 1)
+	newURL = strings.Replace(newURL, "www.", "", 1)
 
 	newURL = strings.Split(newURL, "/")[0]
 

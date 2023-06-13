@@ -1,12 +1,20 @@
 @mixin button($color) {
     background-color: $color;
     color: white;
-    padding: 0.5rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     margin-left: 0.5rem;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     font-size: 1rem;
+    display: flex;
+    align-items: center;
+    height: 2rem;
+    box-shadow: 0 0.15rem 0.2rem rgba(0, 0, 0, 0.25);
+
+    span {
+        margin-left: 0.25rem;
+    }
 
     &:hover {
         background-color: darken($color, 10%);

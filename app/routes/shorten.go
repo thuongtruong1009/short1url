@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
-	// "github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 	"github.com/thuongtruong1009/short1url/helpers"
 	"github.com/thuongtruong1009/short1url/database"
@@ -14,6 +13,7 @@ import (
 
 type request struct {
 	URL string	`json:"url" binding:"required"`
+	IP string `json:"ip" binding:"required"`
 	CustomShort string `json:"short" binding:"omitempty,min=3,max=10"`
 	Expiry time.Duration `json:"expiry" binding:"omitempty,min=1,max=365"`
 }
@@ -78,6 +78,12 @@ func ShortenURL(c *fiber.Ctx) error {
 	}
 
 	err = r.Set(database.Ctx, id, body.URL, body.Expiry*3600*time.Second).Err()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error":"cannot connect to database"})
+	}
+
+	// add shorted url to index
+	err = r.SAdd(database.Ctx, "index:" + body.IP, id).Err()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error":"cannot connect to database"})
 	}

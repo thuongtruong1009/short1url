@@ -1,87 +1,83 @@
-<!-- form.html -->
-<form method="POST" action="/">
-    <input type="text" name="field1" placeholder="Field 1"><br>
-    <input type="text" name="field2" placeholder="Field 2"><br>
-    <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
 
-<div id="response-container">
-    {{if .ResponseData}}
-        Response Data: {{.ResponseData}}
-    {{end}}
-</div>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		content="width=device-width,
+						initial-scale=1.0" />
+	<title>QR Code Generator</title>
+	<style>
+		h1, h3 {
+		color: green;
+		}
+		body, header {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		}
+	</style>
 
+	<script src=
+"https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+	</script>
+</head>
 
-
---------------------------------
-package main
-
-import (
-	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"html/template"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-)
-
-type ViewData struct {
-	ResponseData string
-}
-
-func main() {
-	app := fiber.New()
-
-	app.Get("/", renderForm)
-	app.Post("/", handleForm)
-
-	app.Listen(":8080")
-}
-
-func renderForm(c *fiber.Ctx) error {
-	tmpl := template.Must(template.ParseFiles("form.html"))
-
-	data := ViewData{
-		ResponseData: "",
+<body>
+	<header>
+		<h1>GeeksforGeeks</h1>
+		<h3>QR code generator using qrcode.js</h3>
+		<h3>Enter QR code content and generate QR</h3>
+	</header>
+	<main>
+		<form action="/"
+			id="qr-generation-form">
+			<input type="text"
+				name="qr-code-content"
+				id="qr-content"
+				value=""
+				placeholder="Enter QR content"
+				autocomplete="off" />
+			<input type="submit"
+				value="Generate QR Code" />
+		</form><br />
+		<div id="qr-code"></div>
+	</main>
+</body>
+<script>
+	let qrContentInput = document.getElementById("qr-content");
+	let qrGenerationForm =
+	document.getElementById("qr-generation-form");
+	let qrCode;
+	
+	function generateQrCode(qrContent) {
+	return new QRCode("qr-code", {
+		text: qrContent,
+		width: 256,
+		height: 256,
+		colorDark: "#000000",
+		colorLight: "#ffffff",
+		correctLevel: QRCode.CorrectLevel.H,
+	});
 	}
-
-	err := tmpl.Execute(c.Response().BodyWriter(), data)
-	if err != nil {
-		return err
+	
+	// Event listener for form submit event
+	qrGenerationForm.addEventListener("submit", function (event) {
+	// Prevent form submission
+	event.preventDefault();
+	let qrContent = qrContentInput.value;
+	if (qrCode == null) {
+		
+		// Generate code initially
+		qrCode = generateQrCode(qrContent);
+	} else {
+		
+		// If code already generated then make
+		// again using same object
+		qrCode.makeCode(qrContent);
 	}
+	});
+</script>
 
-	return nil
-}
-
-func handleForm(c *fiber.Ctx) error {
-	formData := url.Values{
-		"field1": {c.FormValue("field1")},
-		"field2": {c.FormValue("field2")},
-	}
-
-	response, err := http.PostForm("https://example.com/endpoint", formData)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return err
-	}
-
-	responseData := fmt.Sprintf("%s", string(body))
-
-	tmpl := template.Must(template.ParseFiles("form.html"))
-
-	data := ViewData{
-		ResponseData: responseData,
-	}
-
-	err = tmpl.Execute(c.Response().BodyWriter(), data)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
+</html>

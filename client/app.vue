@@ -1,17 +1,61 @@
 <script setup lang="ts">
-import { ref, onMounted} from 'vue';
-import QR from './components/QR.vue';
+import { ref, onMounted } from 'vue';
+import { EBUTTON_OPTION } from './enums/option';
+import QR from './components/icons/QR.vue';
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
+import Clear from './components/icons/Clear.vue';
+import Link from './components/icons/Link.vue';
+import Proxy from './components/icons/Proxy.vue';
+import Analyze from './components/icons/Analyze.vue';
+import Bar from './components/icons/Bar.vue';
+import Download from './components/icons/Download.vue';
+import Check from './components/icons/Check.vue';
+import Copy from './components/icons/Copy.vue';
+import SpeedTest from './components/SpeedTest.vue';
+import BarCode from './components/BarCode.vue';
+import QRCode from './components/QRCode.vue';
+
+const config = useRuntimeConfig();
 
 const url = ref<string>('');
 
+const toolOption = ref<string>(null);
+
 const shortedUrl = ref<string[]>([]);
 
-const clearInput = () => url.value = '';
+onMounted(() => {
+    getAllShorted();
+})
 
-const onSubmit = async (e: Event) => {
+const getAllShorted = async () => {
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+
+    const allRes = await fetch(`${config.apiBase}/all?ip=${ipData.ip}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    const allData = await allRes.json();
+
+    shortedUrl.value = allData;
+}
+
+const onClearInput = () => {
     if (!url.value) return;
+    toolOption.value = null;
+    url.value = '';
+    toolOption.value = null;
+}
+
+const onShorten = async (e: Event) => {
+    if (!url.value) return;
+    toolOption.value = EBUTTON_OPTION.SHORTEN
     e.preventDefault();
-    const response = await fetch('http://localhost:3000/api', {
+
+    const shortenResponse = await fetch(`${config.apiBase}/api`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -19,76 +63,99 @@ const onSubmit = async (e: Event) => {
         body: JSON.stringify({ url: url.value })
     });
 
-    const data = await response.json();
+    const shortenData = await shortenResponse.json();
 
-    shortedUrl.value.push(data.short);
-    clearInput();
+    shortedUrl.value.unshift(shortenData.short);
+    onClearInput();
 }
 
-const generateQrCode = (qrContent) => {
-      return new QRCode("qr-code", {
-        text: qrContent,
-        width: 256,
-        height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H,
-      });
-    }
-
-const qrCodeRef = ref(null)
-let qrCode = null;
-
-
-const onCreateQRCode = (e: Event) => {
+const onBarCode = (e: Event) => {
     e.preventDefault();
-    let qrContent = qrCodeRef.value;
-    if (qrCode == null) {
-        qrCode.clear();
-    }
-   qrCode = generateQrCode(url.value);
+    toolOption.value = EBUTTON_OPTION.BARCODE
 }
 
-// onMounted(() => {
-//     new QRCode("qrcode", url.value);
-// });
+const onClickQr = (e: Event) => {
+    e.preventDefault();
+    toolOption.value = EBUTTON_OPTION.QRCODE
+}
+
+const onAnalyze = (e: Event) => {
+    e.preventDefault();
+    toolOption.value = EBUTTON_OPTION.ANALYZE
+}
 
 </script>
 
 <template>
   <main>
-    <header>
-        <img src="/favicon.svg" alt="logo">
-        <h1>Short1url</h1>
-    </header>
-
-    <blockquote>Ship your link in an easier way</blockquote>
+    <Header />
 
     <section>
-        <form @submit.prevent="onSubmit">
-            <input type="text" name="url" id="url" placeholder="Enter URL" v-model="url">
-            <span @click="clearInput">Clear</span>
-            <QR class="qr_btn" @click="onCreateQRCode" />
-            <button type="submit" @click="onSubmit" :disabled="url.value">Shorten</button>
-        </form>
+        <div class="form">
+            <input type="text" name="url" id="url" placeholder="Enter URL" v-model="url" required>
+            <ul>
+                <li>
+                    <div :disabled="!url" @click="onClearInput" class="clear_btn">
+                        <Clear />
+                        <span>Clear</span>
+                    </div>
+                </li>
+                <li>
+                    <div :disabled="!url" class="analyze_btn" @click="onAnalyze">
+                        <Analyze />
+                        <span>Analyze</span>
+                    </div>
+                </li>
+                <!-- <li>
+                    <div :disabled="!url" class="proxy_btn">
+                        <Proxy />
+                        <span>Proxy</span>
+                    </div>
+                </li> -->
+                <li>
+                    <div :disabled="!url" class="bar_btn" @click="onBarCode">
+                        <Bar />
+                        <span>Bar Code</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="qr_btn" @click="onClickQr">
+                        <QR />
+                        <span>QR Code</span>
+                    </div>
+                </li>
+                <li>
+                    <div :disabled="!url" class="short_btn" @click="onShorten">
+                        <Link />
+                        <span>Shorten</span>
+                    </div>
+                </li>
+            </ul>   
+        </div>
 
-
-        <ul class="response">
+        <!-- <ul class="shorten_response" v-if="(toolOption === 'bar') && (shortedUrl?.length > 0)">
             <li v-for="(url, i) in shortedUrl" :key="i">
                 <h3>Your shorted URL: </h3>
-                <a :href="shortedUrl">{{shortedUrl}}</a>
-                <button>Copy</button>
+                <a :href="url" target="_blank">{{url}}</a>
+                <button @click="onCopy(url, i)" class="copy_btn">
+                    <Copy v-if="shortedUrlIndex !== i" />
+                    <span v-if="shortedUrlIndex !== i">Copy</span>
+                    <Check v-else />
+                </button>
             </li>
-        </ul>
+        </ul> -->
 
-        <div class="qrcode">
-            <div id="qrcode" ref="qrCodeRef" />
-        </div>
+        <ShortedList :shortedUrl="shortedUrl" v-if="toolOption === EBUTTON_OPTION.SHORTEN" />
+
+        <SpeedTest v-if="toolOption === EBUTTON_OPTION.ANALYZE" />
+
+        <QRCode :text="url" v-if="toolOption === EBUTTON_OPTION.QRCODE" />
+
+        <BarCode :text="url" v-if="toolOption === EBUTTON_OPTION.BARCODE" />
+
     </section>
 
-    <footer>
-        <p>Copyright <a href="https://github.com/thuongtruong1009">@thuongtruong1009</a>, 2023 - PRESENT</p>
-    </footer>
+    <Footer />
   </main>
 </template>
 
@@ -109,38 +176,6 @@ main{
     background-size: cover;
     background-position: 100% 10%;
 
-    header {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        margin-top: 3rem;
-        letter-spacing: 0.25rem;
-        font-family: 'Lobster Two', cursive;
-
-        img {
-            width: 4rem;
-            height: 4rem;
-            object-fit: cover;
-            object-position: center;
-            margin-right: 0.5rem;
-        }
-
-        h1 {
-            color: $yellow;
-            text-shadow: 1px 3px 10px rgba(255, 205, 2, 0.4);
-        }
-    }
-
-    blockquote {
-        color: $purple;
-        font-style: italic;
-        margin: 1rem 0 2rem;
-        font-size: 1.2rem;
-        font-family: 'Dancing Script', cursive;
-    }
-
     section{
         border-radius: 0.5rem;
         display: flex;
@@ -148,9 +183,9 @@ main{
         align-items: center;
         justify-content: center;
 
-        form {
+        .form {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
             justify-content: space-between;
             margin: 1rem;
@@ -168,71 +203,44 @@ main{
                 border: none;
                 box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.1); 
                 padding: 0.6rem 1rem;
-                width: 85%;
-            }
-
-            span {
-                margin: 0.5rem;
-                font-size: 0.9rem;
-                cursor: pointer;
-                display: block;
-            }
-
-            .qr_btn {
-                padding: 0.25rem;
-                width: 2rem;
-                height: 2rem;
-                background: white;
-                border-radius: 0.5rem;
-                cursor: pointer;
-            }
-
-            button{
-                @include button($red);
-            }
-        }
-
-        .response {
-            width: 100%;
-            margin: 2rem 0;
-
-            li {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin: 1rem 0;
-                background: $light-blue;
-                padding: 0.5rem;
-                border-radius: 0.5rem;
                 width: 100%;
-                a {
-                    font-weight: bold;
-                    @include link($purple);
-                }
+            }
 
-                button {
-                    @include button($green);
-                    font-size: 1rem;
+            ul{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin: 1rem 0;
+                list-style: none;
+
+                li{
+                    .clear_btn {
+                        @include button($gray);
+                    }
+
+                    .analyze_btn {
+                        @include button($green);
+                    }
+
+                    .proxy_btn {
+                        @include button($blue);
+                    }
+
+                    .bar_btn {
+                        @include button($orange)
+                    }
+
+                    .qr_btn {
+                        @include button($purple)
+                    }
+
+                    .short_btn{
+                        @include button($red);
+                    }
                 }
             }
         }
-
-        .qrcode {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            transform: scale(0.5);
-        }
-    }
-
-    footer{
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        color: white;
-        text-align: center;
-        padding: 1rem;
-        font-size: 0.8rem;
     }
 }
 
@@ -260,7 +268,19 @@ main{
     }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
+    section {
+        width: 900px;
+    }
+}
+
+@media (min-width: 1280px) {
+    section {
+        width: 950px;
+    }
+}
+
+@media (min-width: 1400px) {
     section {
         width: 1000px;
     }

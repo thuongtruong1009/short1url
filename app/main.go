@@ -15,6 +15,7 @@ import (
 func setupRoutes(app *fiber.App) {
 	app.Post("/api", routes.ShortenURL)
 	app.Get("/:url", routes.ResolveURL)
+	app.Post("/all", routes.AllShortedURLsOfUser)
 }
 
 func main() {
@@ -42,7 +43,22 @@ func main() {
     	AllowHeaders:  "Origin, Content-Type, Accept",
 	}))
 
+	// proxy
+	// app.Use(corsMiddleware)
+
 	setupRoutes(app)
 
 	log.Fatal(app.Listen(os.Getenv("APP_PORT")))
 }
+
+// func corsMiddleware(c *fiber.Ctx) error {
+// 	c.Response().Header.Set("Access-Control-Allow-Origin", "*")
+// 	c.Response().Header.Set("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+// 	c.Response().Header.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+// 	if c.Method() == "OPTIONS" {
+// 		return c.SendStatus(http.StatusOK)
+// 	}
+
+// 	return c.Next()
+// }

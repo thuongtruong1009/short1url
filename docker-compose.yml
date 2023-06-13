@@ -3,10 +3,21 @@ version: "3"
 services:
   db:
     image: redis:alpine
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:
       - ./.docker/data:/data
+    restart: always
+
+  commander:
+    container_name: commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+    - REDIS_HOSTS=local:db:6379
+    ports:
+    - "6380:8081"
 
   app:
     image: thuongtruong1009/short1url
@@ -15,3 +26,4 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    restart: always

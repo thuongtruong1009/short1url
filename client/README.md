@@ -61,3 +61,9 @@ yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+## References
+
+[Logo](https://icon-icons.com/icon/link/102162)
+[Internet speed](https://stackoverflow.com/questions/5529718/how-to-detect-internet-speed-in-javascript)

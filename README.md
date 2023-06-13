@@ -1,6 +1,8 @@
-# SHORT1URL
+<div align="center">
+    <h1><img src="public/logo.png" alt="logo"> SHORT1URL</h1>
+</div>
 
-<img align="center" src="public/architecture.png" alt="architecture_img">
+![](public/architecture.png)
 
 ## How to run in local
 
@@ -33,5 +35,4 @@ curl -X POST 'http://localhost:3000/api'
 
 ## References
 
-[Logo](https://icon-icons.com/icon/link/102162)
 [Ref1](https://liamhieuvu.com/url-shortener-with-golang-and-mysql)
