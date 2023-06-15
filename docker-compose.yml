@@ -19,11 +19,46 @@ services:
     ports:
     - "6380:8081"
 
-  app:
-    image: thuongtruong1009/short1url
-    build: app
+  client:
+    container_name: client
+    build: ./client
     ports:
       - "3000:3000"
+    volumes:
+      # - ./client:/client
+      - /client/node_modules
+    command: "npm run dev"
+    networks:
+      - app-network
+    restart: always
+
+  app:
+    container_name: app
+    build: ./app
+    ports:
+      - "8080:8080"
+    # volumes:
+    #   - ./app:/app
     depends_on:
       - db
+    networks:
+      - app-network
     restart: always
+
+  nginx:
+    image: nginx:1.24-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./nginx:/var/log/nginx
+    depends_on:
+      - client
+      - app
+    networks:
+      - app-network
+
+
+networks:
+  app-network:

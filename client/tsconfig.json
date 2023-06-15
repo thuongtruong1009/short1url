@@ -1,4 +1,28 @@
 {
+  // "compilerOptions": {
+  //   "target": "es2020",
+  //   "module": "esnext",
+  //   "moduleResolution": "node",
+  //   "lib": ["es2020", "dom"],
+  //   "jsx": "preserve",
+  //   "sourceMap": true,
+  //   "strict": true,
+  //   "esModuleInterop": true,
+  //   "skipLibCheck": true,
+  //   "resolveJsonModule": true,
+  //   "noEmit": true,
+  //   "baseUrl": ".",
+  //   "paths": {
+  //     "~/*": ["./src/*"]
+  //   },
+  //   "types": [
+  //     "@nuxt/types",
+  //   ]
+  // },
+  // "exclude": [
+  //   "node_modules"
+  // ],
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
 }
+

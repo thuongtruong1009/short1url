@@ -28,5 +28,3 @@ vendor/
 
 .docker/data/*
 !.docker/data/.gitkeep
-
-*/node_modules/*

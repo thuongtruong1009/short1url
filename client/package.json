@@ -17,11 +17,9 @@
     "sass": "^1.63.3"
   },
   "dependencies": {
-    "@nuxtjs/composition-api": "^0.33.1",
     "@nuxtjs/pwa": "^3.3.5",
     "file-saver": "^2.0.5",
     "jsbarcode": "^3.11.5",
-    "qrcode": "^1.5.3",
-    "vue-identify-network": "^3.0.1"
+    "qrcode": "^1.5.3"
   }
 }

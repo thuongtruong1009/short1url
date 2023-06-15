@@ -6,15 +6,14 @@ import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Clear from './components/icons/Clear.vue';
 import Link from './components/icons/Link.vue';
-import Proxy from './components/icons/Proxy.vue';
-import Analyze from './components/icons/Analyze.vue';
+import AnalyzeIcon from './components/icons/Analyze.vue';
 import Bar from './components/icons/Bar.vue';
 import Download from './components/icons/Download.vue';
-import Check from './components/icons/Check.vue';
-import Copy from './components/icons/Copy.vue';
-import SpeedTest from './components/SpeedTest.vue';
+import Analyze from './components/Analyze.vue';
 import BarCode from './components/BarCode.vue';
 import QRCode from './components/QRCode.vue';
+import ShortedList from './components/ShortedList.vue';
+import { FetchMethod } from './services/fetch';
 
 const config = useRuntimeConfig();
 
@@ -29,59 +28,34 @@ onMounted(() => {
 })
 
 const getAllShorted = async () => {
-    const ipRes = await fetch('https://api.ipify.org?format=json');
-    const ipData = await ipRes.json();
-
-    const allRes = await fetch(`${config.apiBase}/all?ip=${ipData.ip}`, {
+    const ipData = await FetchMethod('https://api.ipify.org?format=json')
+    const allData = await FetchMethod(`${config.public.apiBase}/all?ip=${ipData.ip}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
     });
-    const allData = await allRes.json();
 
     shortedUrl.value = allData;
 }
 
 const onClearInput = () => {
-    if (!url.value) return;
-    toolOption.value = null;
     url.value = '';
     toolOption.value = null;
 }
 
-const onShorten = async (e: Event) => {
+const onShorten = async () => {
     if (!url.value) return;
     toolOption.value = EBUTTON_OPTION.SHORTEN
-    e.preventDefault();
 
-    const shortenResponse = await fetch(`${config.apiBase}/api`, {
+    const shortenData = await FetchMethod(`${config.public.apiBase}/api`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ url: url.value })
-    });
+    })
 
-    const shortenData = await shortenResponse.json();
-
-    shortedUrl.value.unshift(shortenData.short);
+    shortedUrl.value.push(shortenData.short);
     onClearInput();
 }
 
-const onBarCode = (e: Event) => {
-    e.preventDefault();
-    toolOption.value = EBUTTON_OPTION.BARCODE
-}
-
-const onClickQr = (e: Event) => {
-    e.preventDefault();
-    toolOption.value = EBUTTON_OPTION.QRCODE
-}
-
-const onAnalyze = (e: Event) => {
-    e.preventDefault();
-    toolOption.value = EBUTTON_OPTION.ANALYZE
+const onClickOptionBtn = (option: EBUTTON_OPTION) => {
+    toolOption.value = option
 }
 
 </script>
@@ -95,59 +69,41 @@ const onAnalyze = (e: Event) => {
             <input type="text" name="url" id="url" placeholder="Enter URL" v-model="url" required>
             <ul>
                 <li>
-                    <div :disabled="!url" @click="onClearInput" class="clear_btn">
+                    <button :disabled="!url" @click="onClearInput" class="clear_btn">
                         <Clear />
                         <span>Clear</span>
-                    </div>
+                    </button>
                 </li>
                 <li>
-                    <div :disabled="!url" class="analyze_btn" @click="onAnalyze">
-                        <Analyze />
+                    <button class="analyze_btn" @click="onClickOptionBtn(EBUTTON_OPTION.ANALYZE)">
+                        <AnalyzeIcon />
                         <span>Analyze</span>
-                    </div>
+                    </button>
                 </li>
-                <!-- <li>
-                    <div :disabled="!url" class="proxy_btn">
-                        <Proxy />
-                        <span>Proxy</span>
-                    </div>
-                </li> -->
                 <li>
-                    <div :disabled="!url" class="bar_btn" @click="onBarCode">
+                    <button :disabled="!url" class="bar_btn" @click="onClickOptionBtn(EBUTTON_OPTION.BARCODE)">
                         <Bar />
                         <span>Bar Code</span>
-                    </div>
+                    </button>
                 </li>
                 <li>
-                    <div class="qr_btn" @click="onClickQr">
+                    <button :disabled="!url" class="qr_btn" @click="onClickOptionBtn(EBUTTON_OPTION.QRCODE)">
                         <QR />
                         <span>QR Code</span>
-                    </div>
+                    </button>
                 </li>
                 <li>
-                    <div :disabled="!url" class="short_btn" @click="onShorten">
+                    <button :disabled="!url" class="short_btn" @click="onShorten">
                         <Link />
                         <span>Shorten</span>
-                    </div>
+                    </button>
                 </li>
             </ul>   
         </div>
 
-        <!-- <ul class="shorten_response" v-if="(toolOption === 'bar') && (shortedUrl?.length > 0)">
-            <li v-for="(url, i) in shortedUrl" :key="i">
-                <h3>Your shorted URL: </h3>
-                <a :href="url" target="_blank">{{url}}</a>
-                <button @click="onCopy(url, i)" class="copy_btn">
-                    <Copy v-if="shortedUrlIndex !== i" />
-                    <span v-if="shortedUrlIndex !== i">Copy</span>
-                    <Check v-else />
-                </button>
-            </li>
-        </ul> -->
+        <ShortedList :shortedUrl="shortedUrl" />
 
-        <ShortedList :shortedUrl="shortedUrl" v-if="toolOption === EBUTTON_OPTION.SHORTEN" />
-
-        <SpeedTest v-if="toolOption === EBUTTON_OPTION.ANALYZE" />
+        <Analyze v-if="toolOption === EBUTTON_OPTION.ANALYZE" />
 
         <QRCode :text="url" v-if="toolOption === EBUTTON_OPTION.QRCODE" />
 
@@ -178,10 +134,8 @@ main{
 
     section{
         border-radius: 0.5rem;
-        display: flex;
+        @include flex-center;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
 
         .form {
             display: flex;
@@ -207,11 +161,9 @@ main{
             }
 
             ul{
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                @include flex-center;
                 width: 100%;
-                margin: 1rem 0;
+                margin-top: 1rem;
                 list-style: none;
 
                 li{
@@ -221,10 +173,6 @@ main{
 
                     .analyze_btn {
                         @include button($green);
-                    }
-
-                    .proxy_btn {
-                        @include button($blue);
                     }
 
                     .bar_btn {
