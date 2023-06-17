@@ -8,6 +8,8 @@ services:
       - "6379:6379"
     volumes:
       - ./.docker/data:/data
+    networks:
+      - app-network
     restart: always
 
   commander:
@@ -22,12 +24,10 @@ services:
   client:
     container_name: client
     build: ./client
+    env_file:
+      - ./client/.env
     ports:
       - "3000:3000"
-    volumes:
-      # - ./client:/client
-      - /client/node_modules
-    command: "npm run dev"
     networks:
       - app-network
     restart: always
@@ -35,10 +35,10 @@ services:
   app:
     container_name: app
     build: ./app
+    env_file:
+      - ./app/.env
     ports:
       - "8080:8080"
-    # volumes:
-    #   - ./app:/app
     depends_on:
       - db
     networks:
@@ -49,16 +49,17 @@ services:
     image: nginx:1.24-alpine
     container_name: nginx
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - ./nginx:/var/log/nginx
+      - ~/nginx:/var/log/nginx
+      - ~/nginx/default.conf:/etc/nginx/conf.d
     depends_on:
       - client
       - app
     networks:
       - app-network
-
+    restart: always
 
 networks:
   app-network:
+    driver: bridge

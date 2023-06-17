@@ -19,7 +19,7 @@ const config = useRuntimeConfig();
 
 const url = ref<string>('');
 
-const toolOption = ref<string>(null);
+const toolOption = ref<string>(EBUTTON_OPTION.SHORTEN);
 
 const shortedUrl = ref<string[]>([]);
 
@@ -127,7 +127,7 @@ main{
     align-items: center;
     min-height: 100vh;
     overflow: hidden;
-    background-image: url('/landing.png');
+    background-image: url('public/landing.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 100% 10%;
@@ -145,7 +145,7 @@ main{
             margin: 1rem;
             padding: 2rem 1rem;
             background: rgb(247, 247, 247);
-            background-image: url('/bg.png');
+            background-image: url('public/bg.png');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;

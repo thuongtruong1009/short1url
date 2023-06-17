@@ -14,6 +14,7 @@ import Org from './icons/ip/Org.vue';
 import As from './icons/ip/As.vue';
 import Query from './icons/ip/Query.vue';
 import Ping from './icons/ip/Ping.vue';
+import { FetchMethod } from '../services/fetch';
 
 const ipItems = shallowRef([]);
 const config = useRuntimeConfig();
@@ -46,80 +47,32 @@ const hexToRgb = (hex) => {
 const randomBackgroundColor = () => {
   return `rgba(${hexToRgb(randomColor())}, 0.1)`;
 }
-
-onMounted(async()=> {
-  aa()
-  const {data, pending, error} = await useFetch(`${process.env.NUXT_PUBLIC_API_BASE}/api/ip`)
-
-  // add
-  ipItems.value.push({ 
-    name: 'status',
-    text: data._rawValue.status,
-    icon: Status
-  },
-  {
-    name: 'country',
-    text: data._rawValue.country + ' - ' + data._rawValue.countryCode,
-    icon: Country
-  },
-  {
-    name: 'region',
-    text: data._rawValue.region + ' - ' + data._rawValue.regionName,
-    icon: Region
-  },
-  {
-    name: 'city',
-    text: data._rawValue.city,
-    icon: City
-  },
-  {
-    name: 'zip',
-    text: data._rawValue.zip,
-    icon: Zip
-  },
-  {
-    name: 'lat',
-    text: data._rawValue.lat + '°',
-    icon: Lat
-  },
-  {
-    name: 'lon',
-    text: data._rawValue.lon + '°',
-    icon: Lon
-  },
-  {
-    name: 'timezone',
-    text: data._rawValue.timezone,
-    icon: Timezone
-  },
-  {
-    name: 'isp',
-    text: data._rawValue.isp,
-    icon: Isp
-  },
-  {
-    name: 'organization',
-    text: data._rawValue.org,
-    icon: Org
-  },
-  {
-    name: 'as',
-    text: data._rawValue.as,
-    icon: As
-  },
-  {
-    name: 'query',
-    text: data._rawValue.query,
-    icon: Query
-  })
-});
-
-// data
-// http://ip-api.com/json
-// https://jsonip.com/
-// https://ipinfo.io/
-// ui
-// https://speedsmart.net/
+const getIPInfo = async () => {
+  const data = await FetchMethod(`${config.public.appBase}/api/ip`)
+  // const {data, pending, error} = await useFetch(`${process.env.NUXT_PUBLIC_APP_BASE}/api/ip`)
+  // data
+  // http://ip-api.com/json
+  // https://jsonip.com/
+  // https://ipinfo.io/
+  // ui
+  // https://speedsmart.net/
+  console.log('here: ', data)
+  ipItems.value = [
+    { name: 'status', text: data.status, icon: Status },
+    { name: 'country', text: data.country, icon: Country },
+    { name: 'region', text: data.regionName, icon: Region },
+    { name: 'city', text: data.city, icon: City },
+    { name: 'zip', text: data.zip, icon: Zip },
+    { name: 'lat', text: data.lat, icon: Lat },
+    { name: 'lon', text: data.lon, icon: Lon },
+    { name: 'timezone', text: data.timezone, icon: Timezone },
+    { name: 'isp', text: data.isp, icon: Isp },
+    { name: 'org', text: data.org, icon: Org },
+    { name: 'as', text: data.as, icon: As },
+    { name: 'query', text: data.query, icon: Query }
+  ]
+  return data
+}
 
 const startTime = ref(null);
 const endTime = ref(null);
@@ -149,7 +102,7 @@ const calculateSpeed = () => {
     })
 };
 
-const aa = async () => {
+const loadSpeed = async () => {
     startTime.value = new Date().getTime();
     const image = new Image();
     image.onload = async () => {
@@ -162,71 +115,88 @@ const aa = async () => {
     image.src = imageLink;
 };
 
+onMounted(()=> {
+  loadSpeed()
+  getIPInfo()
+});
+
 </script>
 
 <template>
-  <ul>
-    <li v-for="item in ipItems.filter((i) => i.text !=='')" :key="item" :style="{ backgroundColor: randomBackgroundColor() }">
-      <div class="cell">
-        <div class="info_left">
-          <component :is="item.icon" class="info_left-icon" :style="{color: randomColor()}" />
-        </div>
+  <div class="analyze_container">
+    <h3>Your analyze result testing</h3>
+    <ul>
+      <li v-for="item in ipItems.filter((i) => i.text !=='')" :key="item" :style="{ backgroundColor: randomBackgroundColor() }">
+        <div class="cell">
+          <div class="info_left">
+            <component :is="item.icon" class="info_left-icon" :style="{color: randomColor()}" />
+          </div>
 
-        <div class="info_right">
-          <h4>{{item.name}}</h4>
-          <p>{{item.text}}</p>
+          <div class="info_right">
+            <h4>{{item.name}}</h4>
+            <p>{{item.text}}</p>
+          </div>
         </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  background: #F8F8F8;
+.analyze_container {
+  @include flex-center;
+  flex-direction: column;
+  background: #fff;
   border-radius: 1rem;
   padding: 1rem;
 
-  li {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    width: 12rem;
-    min-height: 5rem;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: flex-start;
+  h3 {
+    margin-bottom: 1rem;
   }
 
-  .cell {
+  ul {
+    list-style: none;
     display: flex;
-    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
 
-    .info_left > .info_left-icon {
-      margin-right: 0.5rem;
-      width: 1.75rem;
-      height: 1.75rem;
+    li {
+      margin: 0.5rem;
+      padding: 0.5rem;
+      width: 12rem;
+      min-height: 5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      justify-content: flex-start;
     }
 
-    .info_right {
+    .cell {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       width: 100%;
-      word-break: break-word;
-      
-      h4 {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-        text-transform: capitalize;
+
+      .info_left > .info_left-icon {
+        margin-right: 0.5rem;
+        width: 1.75rem;
+        height: 1.75rem;
       }
 
-      p{
-        font-size: 0.8rem;
+      .info_right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        word-break: break-word;
+        
+        h4 {
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+          text-align: center;
+          text-transform: capitalize;
+        }
+
+        p{
+          font-size: 0.8rem;
+        }
       }
     }
   }

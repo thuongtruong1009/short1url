@@ -1,0 +1,69 @@
+user  root root;
+worker_processes  auto;
+worker_rlimit_nofile 40000;
+
+pid        /var/run/nginx.pid;
+
+events {
+    use epoll;
+    worker_connections  20000;
+    multi_accept on;
+}
+
+log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+        '$status $body_bytes_sent "$http_referer" '
+        '"$http_user_agent" "$http_x_forwarded_for"';
+
+map $sent_http_content_type $expires {
+    "text/html"                 epoch;
+    "text/html; charset=utf-8"  epoch;
+    default                     off;
+}
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream
+    sendfile on;
+
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name localhost;
+
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        access_log /var/log/nginx/access.log main;
+        error_log /var/log/nginx/error.log warn;
+
+        client_max_body_size 64M;
+
+        gzip on;
+        gzip_types text/plain text/css text/xml application/json text/javascript application/x-javascript application/xml;
+        gzip_min_length 1000;
+
+        location /client/ {
+            expires $expires;
+            proxy_redirect off;
+
+            proxy_pass http://client:3000;
+            root /usr/share/nginx/html;
+            index index.html index.htm;
+            try_files $uri $uri/ /index.html;
+            # proxy_set_header Host $host;
+            # proxy_set_header X-Real-IP $remote_addr;
+            # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            # proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /app/ {
+            rewrite ^/app(/.*)$ $1 break;
+            proxy_pass http://app:8080;
+            proxy_set_header Host $host;
+            # proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}

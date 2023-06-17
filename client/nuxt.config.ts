@@ -1,9 +1,11 @@
+import pkg from "./package.json";
+
 export default defineNuxtConfig({
   // devtools: { enabled: true },
 
   app: {
     head: {
-      title: "Short1url",
+      title: pkg.name,
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -11,7 +13,7 @@ export default defineNuxtConfig({
           hid: "description",
           name: "description",
           content:
-            "ship your link in an easier way",
+            pkg.description,
         },
         { name: "format-detection", content: "telephone=no" },
       ],
@@ -35,8 +37,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8080",
-      appBase: process.env.NUXT_PUBLIC_APP_BASE || "http://localhost:3000",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,
+      appBase: process.env.NUXT_PUBLIC_APP_BASE,
     }
   },
 })

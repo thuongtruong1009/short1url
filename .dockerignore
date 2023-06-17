@@ -7,10 +7,10 @@
 dist
 build
 
-<!-- client/node_modules
-client/npm-debug*
+client/node_modules
 client/.nuxt
-client/.outpput -->
+client/.outpput
+client/dist
 
 # Exclude version control system files
 .git

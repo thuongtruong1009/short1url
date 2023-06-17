@@ -1,9 +1,36 @@
 {
-  "name": "nuxt-app",
+  
+  "name": "short1url",
   "private": true,
+  "version": "1.0",
+  "description": "Ship your link in an easier way",
+    "keywords": [
+        "docker",
+        "nginx",
+        "shortener",
+        "api",
+        "golang",
+        "nuxtjs",
+        "vue",
+        "ssr",
+        "scss",
+        "typescript"
+    ],
+    "homepage": "https://github.com/thuongtruong1009/short1url#readme",
+    "bugs": {
+        "url": "https://github.com/thuongtruong1009/short1url/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thuongtruong1009/short1url"
+    },
+    "funding": "https://paypal.me/thuongtruong1009",
+    "license": "MIT",
+    "author": "Tran Nguyen Thuong Truong <thuongtruong1009@proton.me>",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

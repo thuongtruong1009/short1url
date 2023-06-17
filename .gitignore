@@ -21,7 +21,6 @@ vendor/
 
 # IDE files (remove the ones you don't need)
 .idea/
-.vscode/
 *.iml
 *.ipr
 *.iws

@@ -9,6 +9,7 @@ This is a simple URL shortener service. It is written in Golang and uses Redis a
 ## Preview
 
 ![](public/preview.jpeg)
+![](public/preview_analyze.jpeg)
 
 ## Features
 
@@ -19,13 +20,14 @@ This is a simple URL shortener service. It is written in Golang and uses Redis a
 - [x] Statistics
 - [x] Rate limit
 - [x] Analyze network traffic
-- [x] Unit test
 - [x] QR code generator (custom color, download image)
 - [x] Barcode generator
 - [x] Dockerize
-- [x] Caching with Nginx
 - [x] Auto build and push image
 - [x] Deploy to Vercel (client)
+- [ ] Unit test
+- [ ] Reverse proxy
+- [ ] Caching
 
 ## Architecture
 
