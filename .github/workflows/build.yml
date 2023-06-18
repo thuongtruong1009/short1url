@@ -8,10 +8,11 @@ on:
       - "client/**"
       - "public/**"
       - "docs/**"
+      - ".vscode/**"
       - "**.md"
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,12 +28,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image
+      # api 
+      - name: Build and push api image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./app
           push: true
-          tags: ${{ github.repository }}:latest
+          tags: ghcr.io/${{ github.repository }}/api:latest
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -41,12 +43,21 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.PAT }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+      # client
+      - name: Build and push client image
+        uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./client
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ github.repository }}/client:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.repository.pushed_at }}
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PAT }}

@@ -27,3 +27,5 @@ vendor/
 
 .docker/data/*
 !.docker/data/.gitkeep
+
+*.log

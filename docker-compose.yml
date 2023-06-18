@@ -28,6 +28,10 @@ services:
       - ./client/.env
     ports:
       - "3000:3000"
+    environment:
+      - SERVER_PORT=81
+    volumes:
+      - ./client:/client
     networks:
       - app-network
     restart: always
@@ -39,10 +43,14 @@ services:
       - ./app/.env
     ports:
       - "8080:8080"
+    environment:
+      - DOMAIN=localhost:81
     depends_on:
       - db
     networks:
       - app-network
+    volumes:
+      - ./app:/app/app
     restart: always
 
   nginx:
@@ -51,10 +59,11 @@ services:
     ports:
       - "81:80"
     volumes:
-      - ~/nginx:/var/log/nginx
-      - ~/nginx/default.conf:/etc/nginx/conf.d
+      - ./:/usr/share/nginx/html
+      - ./:/var/www
+      - ./nginx:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - client
       - app
     networks:
       - app-network

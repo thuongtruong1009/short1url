@@ -25,8 +25,8 @@ This is a simple URL shortener service. It is written in Golang and uses Redis a
 - [x] Dockerize
 - [x] Auto build and push image
 - [x] Deploy to Vercel (client)
+- [x] Reverse proxy
 - [ ] Unit test
-- [ ] Reverse proxy
 - [ ] Caching
 
 ## Architecture
