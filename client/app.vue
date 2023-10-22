@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import Analyze from "./components/Analyze.vue";
 import BarCode from "./components/BarCode.vue";
 import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
 import QRCode from "./components/QRCode.vue";
 import ShortedList from "./components/ShortedList.vue";
-import AnalyzeIcon from "./components/icons/Analyze.vue";
 import Bar from "./components/icons/Bar.vue";
 import Link from "./components/icons/Link.vue";
 import QR from "./components/icons/QR.vue";
 import { EBUTTON_OPTION } from "./enums/option";
-import { FetchMethod } from "./services/fetch";
+import { FetchMethod } from "./services";
 
 const config = useRuntimeConfig();
 
@@ -20,6 +18,11 @@ const url = ref<string>("");
 const toolOption = ref<string>(EBUTTON_OPTION.SHORTEN);
 
 const shortedUrl = ref<string[]>([]);
+
+const onClearInput = () => {
+  url.value = "";
+  toolOption.value = EBUTTON_OPTION.SHORTEN;
+};
 
 onMounted(() => {
   getAllShorted();
@@ -35,11 +38,6 @@ const getAllShorted = async () => {
   );
 
   shortedUrl.value = allData;
-};
-
-const onClearInput = () => {
-  url.value = "";
-  toolOption.value = null;
 };
 
 const onShorten = async () => {
@@ -81,12 +79,6 @@ const onClickOptionBtn = (option: EBUTTON_OPTION) => {
               <span>Shorten</span>
             </button>
           </li>
-          <!-- <li>
-            <button :disabled="!url" @click="onClearInput" class="clear_btn">
-              <Clear />
-              <span>Clear</span>
-            </button>
-          </li> -->
 
           <li>
             <button
@@ -109,21 +101,10 @@ const onClickOptionBtn = (option: EBUTTON_OPTION) => {
               <span>Bar Code</span>
             </button>
           </li>
-          <li>
-            <button
-              class="analyze_btn"
-              @click="onClickOptionBtn(EBUTTON_OPTION.ANALYZE)"
-            >
-              <AnalyzeIcon />
-              <span>Analyze</span>
-            </button>
-          </li>
         </ul>
       </div>
 
       <ShortedList :shortedUrl="shortedUrl" />
-
-      <Analyze v-if="toolOption === EBUTTON_OPTION.ANALYZE" />
 
       <QRCode :text="url" v-if="toolOption === EBUTTON_OPTION.QRCODE" />
 
@@ -181,14 +162,6 @@ main {
         list-style: none;
 
         li {
-          // .clear_btn {
-          //   @include button($gray);
-          // }
-
-          .analyze_btn {
-            @include button($green);
-          }
-
           .bar_btn {
             @include button($blue);
           }

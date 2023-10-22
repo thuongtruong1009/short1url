@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import Check from "./icons/Check.vue";
 import Copy from "./icons/Copy.vue";
 
-defineProps<{
+const props = defineProps<{
   url: string;
 }>();
+
+// const config = useRuntimeConfig();
+// const currentUrl = ref<string>(
+//   computed(() => String(config.public.apiBase) + props.url) as unknown as string
+// );
+const currentUrl = ref<string>(computed(() => props.url) as unknown as string);
 
 const isCopied = ref<boolean>(false);
 
@@ -20,9 +26,9 @@ const onCopy = (text: string) => {
 
 <template>
   <li>
-    <h3>Your shorted URL:</h3>
-    <a :href="url" target="_blank">{{ url }}</a>
-    <button @click="onCopy(url)">
+    <h4>Your shorted URL:</h4>
+    <a :href="props.url" target="_blank">{{ props.url }}</a>
+    <button @click="onCopy(props.url)">
       <Copy v-if="!isCopied" />
       <span v-if="!isCopied">Copy</span>
       <Check v-else />

@@ -36,7 +36,6 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    ipResolver: process.env.IP_RESOLVER,
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       appBase: process.env.NUXT_PUBLIC_APP_BASE,

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   db:
-    image: redis:alpine
+    image: redis:7.0-alpine
     container_name: redis
     ports:
       - "6379:6379"
@@ -29,7 +29,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - SERVER_URL=http://localhost:81/api
+      - SERVER_URL=http://localhost:81/s
     volumes:
       - ./client:/client
       - /client/node_modules
@@ -37,7 +37,7 @@ services:
       - app-network
     restart: always
 
-  app:
+  api:
     container_name: app
     build: ./app
     env_file:
@@ -45,7 +45,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DOMAIN=localhost:81/api
+      - DOMAIN=localhost:81/s
     depends_on:
       - db
     networks:
@@ -65,7 +65,8 @@ services:
       - ./nginx:/var/log/nginx
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - app
+      - api
+      # - client
     networks:
       - app-network
     restart: always

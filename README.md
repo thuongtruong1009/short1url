@@ -1,4 +1,8 @@
 <div align="center">
+    <!-- <img alt="Docker Automated build" src="https://img.shields.io/docker/automated/thuongtruong1009/short1url">
+    <img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/thuongtruong1009/short1url/build.yml">
+    <img alt="Docker Image Size (tag)" src="https://img.shields.io/docker/image-size/thuongtruong1009/short1url-api/latest">
+    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/thuongtruong1009/short1url"> -->
     <h1><img src="public/logo.png" alt="logo"> SHORT1URL</h1>
 </div>
 
@@ -71,10 +75,11 @@ body: {
 
 # with curl
 curl -X POST 'http://localhost:3000/api'
-     -H 'Content-Type: application/json' 
+     -H 'Content-Type: application/json'
      -d '{"url": "<your_original_url>"}"
 ```
 
-## References
+<!-- ## References
 
 [Ref1](https://liamhieuvu.com/url-shortener-with-golang-and-mysql)
+[Barcode](https://fengyuanchen.github.io/vue-barcode/) -->
