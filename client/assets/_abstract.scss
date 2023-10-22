@@ -1,38 +1,44 @@
 @mixin button($color) {
-    background-color: $color;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    margin-left: 0.5rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    height: 2rem;
-    box-shadow: 0 0.15rem 0.2rem rgba(0, 0, 0, 0.25);
+  background-color: $color;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  box-shadow: 0 0.15rem 0.2rem rgba(0, 0, 0, 0.25);
 
-    span {
-        margin-left: 0.25rem;
-    }
+  span {
+    margin-left: 0.25rem;
+  }
 
-    &:hover {
-        background-color: darken($color, 10%);
-    }
+  &:hover {
+    background-color: darken($color, 10%);
+  }
 }
 
 @mixin link($color) {
-    color: $color;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
+  color: $color;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
 
-    &:hover {
-        filter: brightness(110%)
-    }
+  &:hover {
+    filter: brightness(110%);
+  }
 }
 
 @mixin flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  span {
+    display: none;
+  }
 }

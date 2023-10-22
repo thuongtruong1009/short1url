@@ -17,9 +17,9 @@ services:
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
-    - REDIS_HOSTS=local:db:6379
+      - REDIS_HOSTS=local:db:6379
     ports:
-    - "6380:8081"
+      - "6380:8081"
 
   client:
     container_name: client
@@ -29,9 +29,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - SERVER_PORT=81
+      - SERVER_URL=http://localhost:81/api
     volumes:
       - ./client:/client
+      - /client/node_modules
     networks:
       - app-network
     restart: always
@@ -44,7 +45,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DOMAIN=localhost:81
+      - DOMAIN=localhost:81/api
     depends_on:
       - db
     networks:
