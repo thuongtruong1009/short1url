@@ -82,4 +82,5 @@ curl -X POST 'http://localhost:3000/api'
 <!-- ## References
 
 [Ref1](https://liamhieuvu.com/url-shortener-with-golang-and-mysql)
-[Barcode](https://fengyuanchen.github.io/vue-barcode/) -->
+[Go on K8s](https://www.callicoder.com/deploy-multi-container-go-redis-app-kubernetes/)
+-->
