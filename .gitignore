@@ -29,3 +29,7 @@ vendor/
 !.docker/data/.gitkeep
 
 *.log
+
+api/.env*
+client/.env*
+!*/.env.example

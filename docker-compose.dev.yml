@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.docker/data:/data
+    networks:
+      - app-network
+    restart: always
+
+  client:
+    container_name: short1url-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./client/.env.dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./client:/frontend/client
+      - /client/node_modules
+    networks:
+      - app-network
+    restart: always
+
+  api:
+    container_name: short1url-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./api/.env.dev
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_ADDR=redis:6379
+    depends_on:
+      - redis
+    networks:
+      - app-network
+    volumes:
+      - ./api:/app/api
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge

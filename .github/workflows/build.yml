@@ -5,11 +5,10 @@ on:
     branches:
       - main
     paths-ignore:
-      - "client/**"
-      - "public/**"
-      - "docs/**"
-      - ".vscode/**"
-      - "**.md"
+      - "!.github/**"
+      - "!app/**"
+      - "!client/**"
+      - "!nginx/**"
 
 jobs:
   build-and-push:
@@ -28,7 +27,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # api 
+      # api
       - name: Build and push api image
         uses: docker/build-push-action@v3
         with:
