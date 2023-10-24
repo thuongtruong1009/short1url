@@ -14,12 +14,9 @@ import (
 
 func setupRoutes(app *fiber.App) {
 	app.Post("/", routes.ShortenURL)
-	// app.Post("", routes.ShortenURL)
+	app.Post("", routes.ShortenURL)
 	app.Get("/:url", routes.ResolveURL)
 	app.Post("/all", routes.AllShortedURLsOfUser)
-	app.Get("/test/test", func (c *fiber.Ctx) error {
-        return c.SendString(os.Getenv("APP_PORT") + " " + os.Getenv("DB_ADDR") + " " + os.Getenv("DB_PASS"))
-    })
 }
 
 func main() {

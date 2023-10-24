@@ -83,4 +83,6 @@ curl -X POST 'http://localhost:3000/api'
 
 [Ref1](https://liamhieuvu.com/url-shortener-with-golang-and-mysql)
 [Go on K8s](https://www.callicoder.com/deploy-multi-container-go-redis-app-kubernetes/)
+[Nginx cache](https://vietnix.vn/cau-hinh-cache-nginx/)
+[Nginx refs](https://github.dev/veryacademy/yt-nginx-mastery-series)
 -->

@@ -6,15 +6,12 @@
 
 # Exclude any build artifacts or output files
 
-dist
-build
-
 client/node_modules
-client/.nuxt
 client/.outpput
 client/dist
 
-app/.env.example
+\*/.env.example
+
 app/.gitignore
 app/Dockerfile
 app/fly.toml
