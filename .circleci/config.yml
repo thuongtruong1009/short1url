@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: /go/src/github.com/thuongtruong1009/short1url
+    working_directory: /go/src/github.com/thuongtruong1009/short1url/api
     docker:
       - image: circleci/golang:1.15.8
     steps:
