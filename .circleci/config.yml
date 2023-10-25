@@ -2,11 +2,12 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: ~/api
+    working_directory: /go/src/github.com/thuongtruong1009/short1url
     docker:
       - image: circleci/golang:1.15.8
     steps:
       - checkout
+      - run: cd api
       - run:
           name: Install dependencies
           command: go mod tidy
