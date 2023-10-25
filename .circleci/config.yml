@@ -7,6 +7,7 @@ jobs:
       - image: circleci/golang:1.15.8
     steps:
       - checkout
+      - run: cd api
       - run: ls
       - run: go get -v -t -d ./...
       - run: go test -v ./...
