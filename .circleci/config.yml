@@ -1,12 +1,27 @@
 version: 2.1
 
+orbs:
+  go: circleci/go@1.7.3
+
 jobs:
-  build:
+  test-and-build:
     working_directory: /go/src/github.com/thuongtruong1009/short1url
     docker:
       - image: cimg/go:1.20
+      - image: cimg/redis:7.0
+        environment:
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ""
     steps:
       - checkout
+      - go/load-cache
+      - go/mod-download
+      - go/save-cache
+      - go/test:
+          covermode: atomic
+          failfast: true
+          race: true
       - run: cd api && go mod tidy && go test -v ./...
       - run:
           name: Run tests
@@ -20,7 +35,6 @@ jobs:
           command: cd api && go build -o main
 
 workflows:
-  version: 2
-  build-deploy:
+  sample:
     jobs:
-      - build
+      - test-and-build
