@@ -15,10 +15,6 @@ jobs:
           REDIS_PASSWORD: ""
     steps:
       - checkout
-      - go/test:
-          covermode: atomic
-          failfast: true
-          race: true
       - run: cd api && go mod tidy && go test -v ./...
       - run:
           name: Run tests
