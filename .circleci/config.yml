@@ -19,6 +19,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            cd api
             mkdir -p /tmp/test-reports
             gotestsum --junitfile /tmp/test-reports/unit-tests.xml
       - store_test_results:

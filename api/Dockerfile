@@ -1,4 +1,4 @@
-FROM golang:alpine as development
+FROM golang:1.20-alpine AS development
 
 RUN mkdir /app
 
@@ -12,7 +12,7 @@ COPY . /app
 
 RUN GOOS=linux go build -ldflags="-s -w" -o main main.go
 
-FROM alpine as production
+FROM alpine AS production
 
 LABEL "maintainer"="thuongtruong1009"
 LABEL "org.opencontainers.image.authors"="Tran Nguyen Thuong Truong <thuongtruongofficial@gmail.com>"

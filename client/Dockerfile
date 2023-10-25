@@ -1,4 +1,4 @@
-FROM node:18-alpine as development
+FROM node:18-alpine AS development
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:18-alpine as production
+FROM node:18-alpine AS production
 
 LABEL "website.name"="short1url"
 LABEL "maintainer"="thuongtruong1009"
