@@ -7,7 +7,7 @@ jobs:
       - image: circleci/golang:1.15.8
     steps:
       - checkout
-      - run: cd api && go mod tidy && go test -v ./...
+      - run: cd api && go test -v ./...
       - run:
           name: Run tests
           command: |
