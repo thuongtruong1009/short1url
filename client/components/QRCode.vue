@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, watchEffect } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
 import {saveAs} from "file-saver";
 import {toString} from "qrcode";
 

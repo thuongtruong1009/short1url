@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine as development
+FROM golang:1.20-alpine AS development
 
 RUN mkdir /app
 
@@ -12,7 +12,7 @@ COPY . /app
 
 RUN go build -o main main.go
 
-FROM golang:1.20-alpine as production
+FROM golang:1.20-alpine AS production
 
 COPY . /app
 

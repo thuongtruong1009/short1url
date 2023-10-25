@@ -25,7 +25,7 @@
   },
   "funding": "https://paypal.me/thuongtruong1009",
   "license": "MIT",
-  "author": "Tran Nguyen Thuong Truong <thuongtruong1009@proton.me>",
+  "author": "Tran Nguyen Thuong Truong <thuongtruongofficial@gmail.com>",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev -p 3001",

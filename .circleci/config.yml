@@ -1,0 +1,33 @@
+version: 2.1
+
+orbs:
+  go: circleci/go@1.7.3
+
+jobs:
+  test-and-build:
+    docker:
+      - image: cimg/go:1.20
+      - image: cimg/redis:7.0
+        environment:
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ""
+    steps:
+      - checkout
+      - run: cd api && go mod tidy && go test -v ./...
+      - run:
+          name: Run tests
+          command: |
+            cd api
+            mkdir -p /tmp/test-reports
+            gotestsum --junitfile /tmp/test-reports/unit-tests.xml
+      - store_test_results:
+          path: /tmp/test-reports
+      - run:
+          name: Build the application
+          command: cd api && go build -o main
+
+workflows:
+  sample:
+    jobs:
+      - test-and-build
