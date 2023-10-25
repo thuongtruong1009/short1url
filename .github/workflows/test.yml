@@ -5,43 +5,39 @@ on:
     branches:
       - main
     paths-ignore:
-      - "public/**"
-      - "docs/**"
-      - ".vscode/**"
-      - "**.md"
+      - "!.github/**"
+      - "!app/**"
+      - "!client/**"
+      - "!nginx/**"
   pull_request:
-    branches:
-      - main
     paths-ignore:
-      - "public/**"
-      - "docs/**"
-      - ".vscode/**"
-      - "**.md"
+      - "!.github/**"
+      - "!app/**"
+      - "!client/**"
+      - "!nginx/**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: 1.20
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+          cache-dependency-path: api/go.sum
 
-    - name: Install dependencies
+      - name: Install dependencies
         run: |
-          cd app
+          cd api
+          go get .
           go mod download
-          cd ../client
-          npm install
 
-    - name: Build and test
+      - name: Build and test
         run: |
-          cd ../app
+          cd api
           go build -v ./...
           go test -v ./...
           go test -json > test.json
-          cd ../client
-          npm run test
