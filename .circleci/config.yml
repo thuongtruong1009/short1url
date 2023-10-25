@@ -4,10 +4,10 @@ jobs:
   build:
     working_directory: /go/src/github.com/thuongtruong1009/short1url
     docker:
-      - image: circleci/golang:1.15.8
+      - image: cimg/go:1.20
     steps:
       - checkout
-      - run: cd api && go test -v ./...
+      - run: cd api && go mod tidy && go test -v ./...
       - run:
           name: Run tests
           command: |
