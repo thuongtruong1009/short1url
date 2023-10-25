@@ -7,10 +7,8 @@ jobs:
       - image: circleci/golang:1.15.8
     steps:
       - checkout
-      - run: cd api
-      - run:
-          name: Install dependencies
-          command: go mod tidy
+      - run: ls
+      - run: go get -v -t -d ./...
       - run: go test -v ./...
       - run:
           name: Run tests
@@ -24,6 +22,7 @@ jobs:
           command: go build -o main
 
 workflows:
+  version: 2
   build-deploy:
     jobs:
       - build
