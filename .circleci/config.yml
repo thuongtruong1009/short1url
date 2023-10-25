@@ -7,9 +7,7 @@ jobs:
       - image: circleci/golang:1.15.8
     steps:
       - checkout
-      - run: cd api && ls
-      - run: cd api && go get -v -t -d ./...
-      - run: cd api && go test -v ./...
+      - run: cd api && go mod download && go test -v ./...
       - run:
           name: Run tests
           command: |
@@ -19,7 +17,7 @@ jobs:
           path: /tmp/test-reports
       - run:
           name: Build the application
-          command: go build -o main
+          command: cd api && go build -o main
 
 workflows:
   version: 2
