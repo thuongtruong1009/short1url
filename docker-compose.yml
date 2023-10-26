@@ -14,7 +14,7 @@ services:
     restart: always
 
   client:
-    # image: thuongtruong1009/short1url-client
+    image: thuongtruong1009/short1url-client
     container_name: client
     build:
       context: ./client
@@ -32,7 +32,7 @@ services:
     restart: always
 
   api:
-    # image: thuongtruong1009/short1url-api
+    image: thuongtruong1009/short1url-api
     container_name: api
     build:
       context: ./api

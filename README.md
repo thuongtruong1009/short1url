@@ -18,7 +18,7 @@ This is a simple URL shortener service. It is written in Golang and uses Redis a
 
 ## Preview
 
-![](public/preview.png)
+![Preview image](public/preview.png)
 
 ## What's new
 
@@ -54,7 +54,7 @@ git clone https://github.com/thuongtruong1009/short1url.git
 cd api && cp .env.example .env
 
 # server
-client && cp .env.example .env
+cd client && cp .env.example .env
 ```
 
 3. Run Docker container
@@ -63,13 +63,12 @@ client && cp .env.example .env
 docker-compose up -d
 ```
 
-4. Open browser
+4. Testing API
 
 ```bash
-http://localhost:81
+# with browser
+Open http://localhost:81/s
 ```
-
-4. Testing API
 
 ```bash
 # with Postman or browser
@@ -92,7 +91,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-Short1url is an [MIT-licensed](LICENSE) open source project. Copyright <a href="https://github.com/thuongtruong1009">thuongtruong1009</a>
+**Short1url** is an [MIT-licensed](LICENSE) open source project.
+
+Copyright of <a href="https://github.com/thuongtruong1009">thuongtruong1009</a>
 
 <!-- ## References
 

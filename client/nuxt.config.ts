@@ -3,6 +3,7 @@ import pkg from "./package.json";
 export default defineNuxtConfig({
   app: {
     head: {
+      htmlAttrs: { lang: "en", dir: "ltr" },
       title: pkg.name,
       meta: [
         { charset: "utf-8" },
@@ -34,6 +35,17 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  modules: [
+    "@nuxtjs/robots",
+    [
+      "@nuxtjs/robots",
+      {
+        UserAgent: "*",
+        Disallow: "/",
+      },
+    ],
+  ],
 
   runtimeConfig: {
     public: {

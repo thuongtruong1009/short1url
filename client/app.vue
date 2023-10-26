@@ -31,7 +31,7 @@ onMounted(() => {
 const getAllShorted = async () => {
   const ipData = await FetchMethod(config.public.ipSource);
   const allData = await FetchMethod(
-    `${config.public.apiBase}/all?ip=${ipData.ip}`,
+    `${config.public.apiBase}/all?ip=${ipData?.ip}`,
     {
       method: "POST",
     }
@@ -74,7 +74,13 @@ const onClickOptionBtn = (option: EBUTTON_OPTION) => {
         />
         <ul>
           <li>
-            <button :disabled="!url" class="short_btn" @click="onShorten">
+            <button
+              :disabled="!url"
+              alt="Shorten"
+              title="shorten_btn"
+              class="short_btn"
+              @click="onShorten"
+            >
               <Link />
               <span>Shorten</span>
             </button>
@@ -83,6 +89,8 @@ const onClickOptionBtn = (option: EBUTTON_OPTION) => {
           <li>
             <button
               :disabled="!url"
+              alt="QR Code"
+              title="QR Code"
               class="qr_btn"
               @click="onClickOptionBtn(EBUTTON_OPTION.QRCODE)"
             >
@@ -94,6 +102,8 @@ const onClickOptionBtn = (option: EBUTTON_OPTION) => {
           <li>
             <button
               :disabled="!url"
+              alt="Bar Code"
+              title="Bar Code"
               class="bar_btn"
               @click="onClickOptionBtn(EBUTTON_OPTION.BARCODE)"
             >

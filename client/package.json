@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/robots": "^3.0.0",
     "file-saver": "^2.0.5",
     "jsbarcode": "^3.11.5",
     "qrcode": "^1.5.3"
